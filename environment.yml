@@ -1,0 +1,10 @@
+name: janux
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - paramiko     # For SSH connections
+  - click        # For command-line interface
+  - pyyaml       # For configuration parsing
+  - cryptography # For key management
