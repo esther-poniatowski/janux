@@ -14,7 +14,7 @@ classifiers = [
 ]
 dependencies = [
     "paramiko",          # For SSH connections
-    "click",             # For CLI interface
+    "typer",             # For CLI interface
     "pyyaml",            # For configuration parsing
     "cryptography"       # For key management
 ]

@@ -5,6 +5,6 @@ channels:
 dependencies:
   - python
   - paramiko     # For SSH connections
-  - click        # For command-line interface
+  - typer        # For command-line interface
   - pyyaml       # For configuration parsing
   - cryptography # For key management
