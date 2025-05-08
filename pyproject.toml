@@ -1,0 +1,31 @@
+[project]
+name = "janux"
+version = "0.1.0"
+description = "Utility for automating project-specific remote server connections."
+authors = [{name = "Esther Poniatowski", email = "esther.poniatowski@ens.psl.eu"}]
+license = {text = "GPL"}
+readme = {file = "README.md", content-type = "text/markdown"}
+keywords = ["ssh", "remote-access", "automation", "server-management"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha"
+]
+dependencies = [
+    "paramiko",          # For SSH connections
+    "click",             # For CLI interface
+    "pyyaml",            # For configuration parsing
+    "cryptography"       # For key management
+]
+
+[project.urls]
+Documentation = "https://github.com/esther-poniatowski/janux"
+Source = "https://github.com/esther-poniatowski/janux"
+
+[project.scripts]
+janux = "janux.main:main"
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
