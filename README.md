@@ -223,6 +223,33 @@ Files can be transferred and organized via declarative tree mappings.
 
 TODO: Detail the procedure.
 
+## Repository Structure
+
+```tree
+janux/
+├── config/
+│   ├── janux.conf                   # Template file for server aliases and identities
+│   └── transfer_maps.yml            # Template for file transfer configurations
+├── src/
+│   └── janux/
+│       ├── __init__.py
+│       ├── main.py                  # Main entry point for CLI operations and argument parsing
+│       ├── cli/                     # CLI subcommands
+│       ├── configuration/           # Load/parse/validate janux.conf and mappings
+│       ├── connection/              # SSH connection logic, authentication, error handling
+│       ├── key_management/          # SSH key generation, encryption, storage
+│       ├── transfer/                # File transfer logic across servers
+│       └── utils/                   # Shared utility functions, centralized logging, validation...
+├── tests/                           # Tests for the full package
+├── docs/                            # API documentation
+├── scripts/                         # Auxiliary scripts for environment setup and installation
+├── environment.yml                  # Python dependencies for conda
+├── pyproject.toml                   # Setup script for pip installation
+├── .gitignore
+├── README.md
+└── LICENSE
+```
+
 ## License
 
 This project is under [GPL License].
