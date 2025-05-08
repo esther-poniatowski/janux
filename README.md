@@ -5,11 +5,11 @@ Janux is a utility designed for automating secure server connections.
 
 ## Features
 
-- [ ] **Identity-based Connection Management**: Manages mutliple server identities from credential files.
-- [ ] **Alias-based Host Access**: Simplifies SSH connections using short labels.
-- [ ] **Non-interactive Scripting Support**: Launches remote commands without manual password entry or prompts.
+- [ ] **Identity-based connection management**: Manages mutliple server identities from credential files.
+- [ ] **Alias-based host access**: Simplifies SSH connections using short labels.
+- [ ] **Non-interactive scripting support**: Launches remote commands without manual password entry or prompts.
 - [ ] **Project-specific SSH key management**: Isolates key storage to prevent global pollution of SSH configurations.
-- [ ] **Secure File Transfers**: Transfers files across servers with structured directory mappings.
+- [ ] **Secure file transfers**: Transfers files across servers with structured directory mappings.
 
 
 ## Installation
@@ -90,7 +90,7 @@ This approach is only relevant to:
    python include/janux/main.py init
    ```
 
-(Optional) To import `janux` modules programmatically in the project's code, add two options are available:
+To import `janux` modules programmatically in the project's code, add two options are available:
 
 1. Install `janux` in editable mode:
   
@@ -122,19 +122,8 @@ This approach is only relevant to:
      ```bash
      echo "/absolute/path/to/project/include/janux/src" >> janux.pth
      ```
-    
-     Now, the Python interpreter automatically adds this path to `sys.path` whenever the environment is activated.
 
-
-After one of the above operation is performed, `janux` is available directly for imports:
-
- ```python
- from janux.connection import SSHConnection
- from janux.key_management import KeyManager
- from janux.configuration import ConfigLoader
- ```
-
-Any modification in `janux`code is applied immediately without reinstalling.
+After one of the above operation is performed, `janux` is available directly for imports (see section [Within a Script](#within-a-script)). Any modification in `janux`code is applied immediately without reinstalling.
 
 
 ## Configuration Files
@@ -212,15 +201,15 @@ Connect to a host via its alias:
 TODO
 ```
 
-#### Within a Script
+#### Within a Script {#within-a-script}
 
-1. Import the `janux` utility:
+Import the `janux` utility:
 
-```python
-
-```
-
-TODO
+ ```python
+ from janux.connection import SSHConnection
+ from janux.key_management import KeyManager
+ from janux.configuration import ConfigLoader
+ ```
 
 
 ### Transfering files
