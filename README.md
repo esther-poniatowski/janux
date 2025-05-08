@@ -76,54 +76,42 @@ This approach is only relevant to:
 2. Install dependencies: From the directory where `janux` code is stored (e.g. `include/janux`), run
    either:
 
-   ```sh
-   pip install -r requirements.txt
-   ```
-   
-   or:
-   
-   ```sh
-   conda env update environment.yml
-   ```
+    ```sh
+    pip install -r requirements.txt
+    ```
+    
+    or:
+    
+    ```sh
+    conda env update environment.yml
+    ```
 
-4. Initialize the configuration: From the project root, run:
+3. Initialize the configuration: From the project root, run:
 
-   ```sh
-   python include/janux/main.py init
-   ```
+    ```sh
+    python include/janux/main.py init
+    ```
 
 To import `janux` modules programmatically in the project's code, add two options are available:
 
 1. Install `janux` in editable mode:
   
-  ```sh
-  cd include/janux
-  pip install -e .
-  ```
+    ```sh
+    cd include/janux
+    pip install -e .
+    ```
 
-2. Add the `src` directory to Python's `site-packages` (if using conda):
+2. Alternatively, add the `src` directory to Python's `site-packages` (if using conda):
 
-  1. Locate the `site-packages` directory: In the activated Conda environment, identify the
-     `site-packages` directory:
-  
-     ```sh
-     conda activate myenv
-     python -m site --user-site
-     ```
+    ```sh
+    conda activate myenv
+    echo "$(pwd)/include/janux/src" > $(python -c "import site; print(site.getsitepackages()[0])")/janux.pth
+    ```
 
-  2. Create a `.pth` file: Navigate to the `site-packages` directory (adjust the path below) and
-     create a `.pth` file:
-  
-     ```sh
-     cd /path/to/miniconda3/envs/myenv/lib/pythonX.Y/site-packages
-     touch janux.pth
-     ```
-
-  3. Edit the `.pth` file to add the absolute path to `janux/src`:
-    
-     ```sh
-     echo "/absolute/path/to/project/include/janux/src" >> janux.pth
-     ```
+    This command locates the `site-packages` directory of the activated Conda environment (typically
+    `/path/to/miniconda3/envs/myenv/lib/pythonX.Y/site-packages`), and creates a `janux.pth` file
+    containing the absolute path to `janux/src`. This directory will be automatically added to the
+    `sys.path` variable upon environment activation.
 
 After one of the above operation is performed, `janux` is available directly for imports (see
 section [Within a Script](#within-a-script)). Any modification in `janux`code is applied immediately
@@ -207,7 +195,7 @@ Connect to a host via its alias:
 TODO: Complete the code
 ```
 
-#### Within a Script {#within-a-script}
+#### Within a Script
 
 Import the `janux` utility:
 
