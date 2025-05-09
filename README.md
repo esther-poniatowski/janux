@@ -27,29 +27,31 @@ The following usage is recommended:
 
 1. Install the `janux` utility in the virtual environment of the project:
 
-  ```bash
-  pip install janux
-  ```
+    ```bash
+    pip install janux
+    ```
 
 2. Verify installation:
   
-  ```sh
-  janux --help
-  ```
+    ```sh
+    janux --help
+    ```
   
-  Expected output should display usage options and command-line arguments.
+    Expected output should display usage options and command-line arguments.
   
 3. Initialize the default structure for the utility in the project directory:
 
-  ```sh
-  janux init
-  ```
+    ```sh
+    janux init
+    ```
   
-  This command will:
-  
-  - Create a `config/janux` directory if it does not exist.
-  - Generate a `janux.conf` file in `config/janux` with example server entries.
-  - Create a `ssh_keys/` folder in `config/janux` for isolated key storage.
+    This command will create a `config/janux` directory (if it does not exist) containing template
+    files and folders:
+
+    - `janux.conf` file: for `janux` settings,
+    - `ssh_spec.ini` file: for specifying server aliases and identities,
+    - `transfer_map` file: for defining a file transfer operation,
+    - `ssh_keys/` folder: for isolated key storage.
 
 ### As a Standalone Dependency
 
@@ -73,35 +75,38 @@ This approach is only relevant to:
      git subtree add --prefix include/janux https://github.com/esther-poniatowski/janux.git main
      ```
 
-2. Install dependencies: From the directory where `janux` code is stored (e.g. `include/janux`), run
-   either:
+2. Install dependencies, via one of the following options:
+
+    - Using pip (requires `toml-to-requirements`):
 
     ```sh
-    pip install -r requirements.txt
+    toml-to-req --toml-file include/janux/pyproject.toml --requirements-file include/janux/requirements.txt
+    pip install -r include/janux/requirements.txt
     ```
-    
-    or:
-    
+  
+    - Using conda (replace `myenv` by the name of the virtual environment):
+  
     ```sh
-    conda env update environment.yml
+    conda env update --name myenv --file include/janux/environment.yml
     ```
 
-3. Initialize the configuration: From the project root, run:
+3. Initialize the configuration:
 
     ```sh
     python include/janux/main.py init
     ```
 
-To import `janux` modules programmatically in the project's code, add two options are available:
+4. Optionally, to import `janux` modules programmatically in the project's code, two options are
+   available:
 
-1. Install `janux` in editable mode:
+    - Using pip to install `janux` in editable mode:
   
     ```sh
-    cd include/janux
-    pip install -e .
+    pip install -e include/janux
     ```
 
-2. Alternatively, add the `src` directory to Python's `site-packages` (if using conda):
+    - Using conda, add the `src` directory to Python's `site-packages` (replace `myenv` by the name
+      of the virtual environment):
 
     ```sh
     conda activate myenv
@@ -117,18 +122,25 @@ After one of the above operation is performed, `janux` is available directly for
 section [Within a Script](#within-a-script)). Any modification in `janux`code is applied immediately
 without reinstalling.
 
-## Configuration Files
+## Configuration File
 
-### Server Identities
-
-Server identities are specified in a central configuration file named `janux.conf`, located in the
-user's project directory.
+Settings for the `janux` utility are specified in a central configuration file named `janux.conf`,
+located in the user's project directory.
 
 Standard locations of the configuration file, by precedence:
 
 1. Project's root directory: `project_name/`
 2. Project's configuration directory: `project_name/config/`
 3. janux directory within configurations: `project_name/config/janux/`
+
+## Usage
+
+### Specifying Server Identities
+
+Server identities are centralized in a configuration file located in the user's project directory.
+By default, this file is generated under the name `ssh_spec.ini` in the configuration folder
+`config/janux/`. Custom locations and file names can be specified by the setting `spec_path` in
+`janux.conf`.
 
 Each server is specified with an alias and connection information, following the standard syntax of
 SSH configuration files:
@@ -140,17 +152,9 @@ user = admin
 identity_file = path/to/keys/alias_key
 ```
 
-### File Transfer Maps
-
-TODO: Detail the procedure.
-
-## Usage
-
-### Specifying Server Identities
-
 Project-specific servers can be added by two approaches:
 
-- Statically, in the `janux.conf` configuration file.
+- Statically, by editing the `janux.conf` configuration file:
 - Dynamically, from the command line.
 
 Add a host with an alias:
@@ -209,15 +213,19 @@ Import the `janux` utility:
 
 Files can be transferred and organized via declarative tree mappings.
 
-TODO: Detail the procedure.
+1. Define a file transfer map following the template in `transfer_map.yml`, specifying the source
+   and destination tree structure (paths, file names) and rules. Example: TODO: Give example.
+
+2. TODO: Detail the procedure.
 
 ## Repository Structure
 
 ```tree
 janux/
 ├── config/
-│   ├── janux.conf                   # Template file for server aliases and identities
-│   └── transfer_maps.yml            # Template for file transfer configurations
+│   ├── janux.conf                   # Template file for janux settings
+│   ├── ssh_spec.ini                 # Template file for server aliases and identities
+│   └── transfer_map.yml             # Template for file transfer rules
 ├── src/
 │   └── janux/
 │       ├── __init__.py
