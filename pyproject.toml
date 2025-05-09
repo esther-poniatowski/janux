@@ -26,6 +26,9 @@ Source = "https://github.com/esther-poniatowski/janux"
 [project.scripts]
 janux = "janux.main:main"
 
+[tool.setuptools.package-data]
+"janux" = ["config/*.conf", "config/*.yml", "config/*.ini"]
+
 [build-system]
 requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
