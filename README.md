@@ -229,9 +229,9 @@ janux/
 ├── src/
 │   └── janux/
 │       ├── __init__.py
-│       ├── main.py                  # Main entry point for CLI operations and argument parsing
+│       ├── __main__.py              # Main package entry point for CLI calls
 │       ├── cli/                     # CLI subcommands
-│       ├── configuration/           # Load/parse/validate janux.conf and mappings
+│       ├── configuration/           # Load/parse/validate configurations and mappings
 │       ├── connection/              # SSH connection logic, authentication, error handling
 │       ├── key_management/          # SSH key generation, encryption, storage
 │       ├── transfer/                # File transfer logic across servers

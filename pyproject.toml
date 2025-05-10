@@ -1,3 +1,5 @@
+# === Package metadata ===
+
 [project]
 name = "janux"
 version = "0.1.0"
@@ -12,23 +14,65 @@ classifiers = [
     "Operating System :: OS Independent",
     "Development Status :: 3 - Alpha"
 ]
-dependencies = [
-    "paramiko",          # For SSH connections
-    "typer",             # For CLI interface
-    "pyyaml",            # For configuration parsing
-    "cryptography"       # For key management
-]
 
 [project.urls]
 Documentation = "https://github.com/esther-poniatowski/janux"
 Source = "https://github.com/esther-poniatowski/janux"
 
-[project.scripts]
-janux = "janux.main:main"
+
+# === Build system requirements ===
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61", "unidep[toml]"]
+
+[tool.setuptools]
+py-modules = ["pyproject_toml_project"] # TODO: What is this for?
 
 [tool.setuptools.package-data]
 "janux" = ["config/*.conf", "config/*.yml", "config/*.ini"]
 
-[build-system]
-requires = ["setuptools>=61", "wheel"]
-build-backend = "setuptools.build_meta"
+
+# === Dependencies ===
+
+[tool.unidep]
+channels = ["conda-forge", "defaults"]
+platforms = ["linux-64", "osx-arm64"]   # used in conda-lock
+
+# --- Runtime dependencies ---
+
+dependencies = [
+    "paramiko",          # for SSH connections
+    "typer",             # for CLI interface
+    "pyyaml",            # for configuration parsing
+    "cryptography"       # for key management
+]
+
+# --- Optional development dependencies ---
+
+[tool.unidep.optional_dependencies]
+test = [
+    "pytest",
+    "pytest-mock",
+    "pytest-pylint",         # Pylint plugin for Pytest
+]
+lint = [
+    "black",                 # code formatter
+    "mypy",                  # type checking
+    "mypy_extensions",
+    "pylint",                # code linting
+    "pyright",               # code linting
+]
+docs = [
+    "sphinx",                 # documentation generator
+    "sphinxcontrib-napoleon", # for numpydoc-style docstrings
+    "sphinx-rtd-theme",       # ReadTheDocs theme
+    "sphinx-needs",           # for requirements and specifications in Sphinx
+    "esbonio"                 # language server for Sphinx
+]
+
+
+# === CLI entry points ===
+
+[project.scripts]
+# TODO: Is it necessary given a __main__.py file is present?
