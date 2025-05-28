@@ -1,6 +1,6 @@
 # Janux
 
-Janux is a utility designed for automating secure server connections.
+Utility for automating secure server connections.
 
 ## Features
 
