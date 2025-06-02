@@ -1,5 +1,5 @@
 // =================================================================================================
-// VS Code Workspace Settings for Architekta
+// VS Code Workspace Settings for Janux
 //
 // Project-specific preferences for editor behavior and development tooling.
 //
@@ -47,7 +47,7 @@
   },
 
   // --- Environment and Terminal ------------------------------------------------------------------
-  "python.defaultInterpreterPath": "${userHome}/miniconda3/envs/architekta/bin/python",
+  "python.defaultInterpreterPath": "${userHome}/miniconda3/envs/janux/bin/python",
   "python.terminal.activateEnvironment": true,
 
 
