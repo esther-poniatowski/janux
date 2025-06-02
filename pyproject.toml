@@ -1,78 +1,55 @@
-# === Package metadata ===
+# ==================================================================================================
+# Pyproject Configuration for Janux Package
+# ==================================================================================================
+
+# --- Build System Requirements --------------------------------------------------------------------
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+# --- Package Metadata -----------------------------------------------------------------------------
 
 [project]
 name = "janux"
 version = "0.1.0"
-description = "Utility for automating project-specific remote server connections."
 authors = [{name = "Esther Poniatowski", email = "esther.poniatowski@ens.psl.eu"}]
-license = {text = "GPL"}
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 readme = {file = "README.md", content-type = "text/markdown"}
-keywords = ["ssh", "remote-access", "automation", "server-management"]
+description = "Remote access manager for automating project-specific server connections"
+keywords = ["automation", "server-management", "ssh", "remote-access"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU General Public License (GPL)",
     "Operating System :: OS Independent",
     "Development Status :: 3 - Alpha"
 ]
-
-[project.urls]
-Documentation = "https://github.com/esther-poniatowski/janux"
-Source = "https://github.com/esther-poniatowski/janux"
+urls = {homepage = "https://github.com/esther-poniatowski/janux"}
 
 
-# === Build system requirements ===
+# --- Dependencies ---------------------------------------------------------------------------------
 
-[build-system]
-build-backend = "setuptools.build_meta"
-requires = ["setuptools>=61", "unidep[toml]"]
-
-[tool.setuptools]
-py-modules = ["pyproject_toml_project"] # TODO: What is this for?
-
-[tool.setuptools.package-data]
-"janux" = ["config/*.conf", "config/*.yml", "config/*.ini"]
-
-
-# === Dependencies ===
-
-[tool.unidep]
-channels = ["conda-forge", "defaults"]
-platforms = ["linux-64", "osx-arm64"]   # used in conda-lock
-
-# --- Runtime dependencies ---
+requires-python = ">=3.12"
 
 dependencies = [
-    "paramiko",          # for SSH connections
-    "typer",             # for CLI interface
-    "pyyaml",            # for configuration parsing
-    "cryptography"       # for key management
-]
-
-# --- Optional development dependencies ---
-
-[tool.unidep.optional_dependencies]
-test = [
-    "pytest",
-    "pytest-mock",
-    "pytest-pylint",         # Pylint plugin for Pytest
-]
-lint = [
-    "black",                 # code formatter
-    "mypy",                  # type checking
-    "mypy_extensions",
-    "pylint",                # code linting
-    "pyright",               # code linting
-]
-docs = [
-    "sphinx",                 # documentation generator
-    "sphinxcontrib-napoleon", # for numpydoc-style docstrings
-    "sphinx-rtd-theme",       # ReadTheDocs theme
-    "sphinx-needs",           # for requirements and specifications in Sphinx
-    "esbonio"                 # language server for Sphinx
+    "paramiko",          # SSH protocol implementation
+    "cryptography"       # Cryptographic recipes and primitives for key management
+    "pyyaml",            # YAML configuration parsing
+    "typer",             # CLI interface
+    "rich",              # Improved CLI output formatting
 ]
 
 
-# === CLI entry points ===
+# --- Package Source Code --------------------------------------------------------------------------
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# --- CLI Entry Points -----------------------------------------------------------------------------
 
 [project.scripts]
-# TODO: Is it necessary given a __main__.py file is present?
+janux = "janux.cli:main"
