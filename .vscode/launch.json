@@ -1,5 +1,5 @@
 // =================================================================================================
-// VS Code Debugging Configurations for Architekta
+// VS Code Debugging Configurations for Janux
 //
 // Defines default debug configuration for Python files using `debugpy`.
 // Launches the current file in the integrated terminal.
