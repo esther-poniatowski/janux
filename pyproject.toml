@@ -34,7 +34,7 @@ requires-python = ">=3.12"
 
 dependencies = [
     "paramiko",          # SSH protocol implementation
-    "cryptography"       # Cryptographic recipes and primitives for key management
+    "cryptography",      # Cryptographic recipes and primitives for key management
     "pyyaml",            # YAML configuration parsing
     "typer",             # CLI interface
     "rich",              # Improved CLI output formatting
