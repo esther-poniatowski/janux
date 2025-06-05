@@ -1,6 +1,61 @@
 # Janux
 
-Utility for automating secure server connections.
+[![Conda](https://img.shields.io/badge/conda-eresthanaconda--channel-blue)](#installation)
+[![Maintenance](https://img.shields.io/maintenance/yes/2025)]()
+[![Last Commit](https://img.shields.io/github/last-commit/esther-poniatowski/architekta)](https://github.com/esther-poniatowski/architekta/commits/main)
+[![Python](https://img.shields.io/badge/python-supported-blue)](https://www.python.org/)
+[![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
+
+Remote access manager for automating project-specific server connections via reproducible and scoped
+SSH configurations.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Documentation](#documentation)
+- [Support](#support)
+- [Contributing](#contributing)
+- [Acknowledgments](#acknowledgments)
+- [License](#license)
+
+## Overview
+
+### Motivation
+
+Complex projects often involve executing distributed workflows across multiple remote servers and
+transferring data across them. This requires managing heterogeneous SSH configurations, credentials,
+and file transfer schemes.
+
+In standard practice, connections are manually configured on a designated controller machine, with
+SSH keys and settings stored globally in user or system locations. This approach is not scalable in
+collaborative or ephemeral computing environments, where multiple users and temporary controller
+machines must be provisioned. It results in repetitive setup procedures, unmanaged key
+proliferation, and residual configuration artifacts persisting after project completion.
+
+### Advantages
+
+This tool introduces a remote access management system for automated, reproducible, and
+project-scoped server orchestration.
+
+It provides the following benefits:
+
+- **Isolated configuration management**: Encapsulates credentials and host aliases at the project
+  level to avoid contamination of global SSH settings.
+- **Simplified access and identity handling**: Supports alias-based SSH connections and secure,
+  password-less authentication across multiple server identities.
+- **Automated setup and teardown**: Facilitates fast, consistent provisioning and cleanup of
+  temporary controller environments through pre-defined procedures.
+- **Reproducible execution and transfer workflows**: Automates task deployment and file
+synchronization across servers via declarative, version-controlled access specifications and
+directory mappings.
+
+---
 
 ## Features
 
@@ -13,239 +68,129 @@ Utility for automating secure server connections.
   SSH configurations.
 - [ ] **Secure file transfers**: Transfers files across servers with structured directory mappings.
 
+---
+
 ## Installation
 
-### Pre-requisites
+To install the package and its dependencies, use one of the following methods:
 
-The following usage is recommended:
+### Using Pip Installs Packages
 
-- **Project-specific usage:** Integrate `janux` into a specific project, where multiple server
-  identities or isolated configurations are required, rather than using it as a global system tool.
-- **Virtual environment**: Isolate `janux` dependencies from the global Python installation.
+Install the package from the GitHub repository URL via `pip`:
 
-### As a Command Line Tool (Recommended)
+```bash
+pip install git+https://github.com/esther-poniatowski/janux.git
+```
 
-1. Install the `janux` utility in the virtual environment of the project:
+### Using Conda
 
-    ```bash
-    pip install janux
-    ```
+Install the package from the private channel eresthanaconda:
 
-2. Verify installation:
-  
-    ```sh
-    janux --help
-    ```
-  
-    Expected output should display usage options and command-line arguments.
-  
-3. Initialize the default structure for the utility in the project directory:
+```bash
+conda install janux -c eresthanaconda
+```
 
-    ```sh
-    janux init
-    ```
-  
-    This command will create a `config/janux` directory (if it does not exist) containing template
-    files and folders:
+### From Source
 
-    - `janux.conf` file: for `janux` settings,
-    - `ssh_spec.ini` file: for specifying server aliases and identities,
-    - `transfer_map` file: for defining a file transfer operation,
-    - `ssh_keys/` folder: for isolated key storage.
+1. Clone the repository:
 
-### As a Standalone Dependency
+      ```bash
+      git clone https://github.com/esther-poniatowski/janux.git
+      ```
 
-This approach is only relevant to:
+2. Create a dedicated virtual environment:
 
-- Use `janux` as a fully accessible and editable package within the main project during development.
-- Synchronize with updates via `git pull` or `git subtree pull`.
+      ```bash
+      cd janux
+      conda env create -f environment.yml
+      ```
 
-1. Download the repository within a dedicated directory in the project (e.g. include), via one of
-   the following options:
-
-   - Git Submodule (if integrated with a larger project):
-
-     ```sh
-     git submodule add https://github.com/esther-poniatowski/janux.git include/janux
-     ```
-
-   - Git Subtree (to manage it independently):
-
-     ```sh
-     git subtree add --prefix include/janux https://github.com/esther-poniatowski/janux.git main
-     ```
-
-2. Install dependencies, via one of the following options:
-
-    - Using pip (requires `toml-to-requirements`):
-
-    ```sh
-    toml-to-req --toml-file include/janux/pyproject.toml --requirements-file include/janux/requirements.txt
-    pip install -r include/janux/requirements.txt
-    ```
-  
-    - Using conda (replace `myenv` by the name of the virtual environment):
-  
-    ```sh
-    conda env update --name myenv --file include/janux/environment.yml
-    ```
-
-3. Initialize the configuration:
-
-    ```sh
-    python include/janux/main.py init
-    ```
-
-4. Optionally, to import `janux` modules programmatically in the project's code, two options are
-   available:
-
-    - Using pip to install `janux` in editable mode:
-  
-    ```sh
-    pip install -e include/janux
-    ```
-
-    - Using conda, add the `src` directory to Python's `site-packages` (replace `myenv` by the name
-      of the virtual environment):
-
-    ```sh
-    conda activate myenv
-    echo "$(pwd)/include/janux/src" > $(python -c "import site; print(site.getsitepackages()[0])")/janux.pth
-    ```
-
-    This command locates the `site-packages` directory of the activated Conda environment (typically
-    `/path/to/miniconda3/envs/myenv/lib/pythonX.Y/site-packages`), and creates a `janux.pth` file
-    containing the absolute path to `janux/src`. This directory will be automatically added to the
-    `sys.path` variable upon environment activation.
-
-After one of the above operation is performed, `janux` is available directly for imports (see
-section [Within a Script](#within-a-script)). Any modification in `janux`code is applied immediately
-without reinstalling.
-
-## Configuration File
-
-Settings for the `janux` utility are specified in a central configuration file named `janux.conf`,
-located in the user's project directory.
-
-Standard locations of the configuration file, by precedence:
-
-1. Project's root directory: `project_name/`
-2. Project's configuration directory: `project_name/config/`
-3. janux directory within configurations: `project_name/config/janux/`
+---
 
 ## Usage
 
-### Specifying Server Identities
+### Command Line Interface (CLI)
 
-Server identities are centralized in a configuration file located in the user's project directory.
-By default, this file is generated under the name `ssh_spec.ini` in the configuration folder
-`config/janux/`. Custom locations and file names can be specified by the setting `spec_path` in
-`janux.conf`.
-
-Each server is specified with an alias and connection information, following the standard syntax of
-SSH configuration files:
-
-```ini
-[server_alias]
-host = 192.168.1.10
-user = admin
-identity_file = path/to/keys/alias_key
-```
-
-Project-specific servers can be added by two approaches:
-
-- Statically, by editing the `janux.conf` configuration file:
-- Dynamically, from the command line.
-
-Add a host with an alias:
+To display the list of available commands and options:
 
 ```sh
-TODO: Complete the code.
+janux --help
 ```
 
-### Setting up SSH Keys
+### Programmatic Usage
 
-Project-specific SSH keys are generated automatically from the configuration file:
+To use the package programmatically in Python:
 
-```sh
-janux generate-keys
+```python
+import janux
 ```
 
-By default, keys are stored locally under `config/ssh_keys/`. They can be stored in a custom
-location using the option `--key_path`.
+---
 
-> [NOTE] To isolate project-specific configurations from the global SSH configuration, keys can be
-> stored in a local project directory, such as `config/ssh_keys`. This local storage prevents
-> unnecessary key persistence on the host machine when the project is removed. This approach is
-> particularly relevant for short-term projects that need to be run from various clones, which all
-> connect to the same remote servers.
+## Configuration
 
-### Connecting to a Remote Server
+### Environment Variables
 
-Once SSH keys are configured, connections are automated for both command line and non-interactive
-scripting.
+|Variable|Description|Default|Required|
+|---|---|---|---|
+|`VAR_1`|Description 1|None|Yes|
+|`VAR_2`|Description 2|`false`|No|
 
-The utility automatically performs the following connection steps:
+### Configuration File
 
-1. Retrieving the connection information from the configuration file.
-2. Adding the appropriate SSH key to the SSH agent.
-3. Executing the SSH command.
+Configuration options are specified in YAML files located in the `config/` directory.
 
-#### From the command line
+The canonical configuration schema is provided in [`config/default.yaml`](config/default.yaml).
 
-Connect to a host via its alias:
-
-```sh
-TODO: Complete the code
+```yaml
+var_1: value1
+var_2: value2
 ```
 
-#### Within a Script
+---
 
-Import the `janux` utility:
+## Documentation
 
- ```python
- from janux.connection import SSHConnection
- from janux.key_management import KeyManager
- from janux.configuration import ConfigLoader
- ```
+- [User Guide](https://esther-poniatowski.github.io/janux/guide/)
+- [API Documentation](https://esther-poniatowski.github.io/janux/api/)
 
-### Transferring files
+> [!NOTE]
+> Documentation can also be browsed locally from the [`docs/`](docs/) directory.
 
-Files can be transferred and organized via declarative tree mappings.
+## Support
 
-1. Define a file transfer map following the template in `transfer_map.yml`, specifying the source
-   and destination tree structure (paths, file names) and rules. Example: TODO: Give example.
+**Issues**: [GitHub Issues](https://github.com/esther-poniatowski/janux/issues)
 
-2. TODO: Detail the procedure.
+**Email**: `{{ contact@example.com }}`
 
-## Repository Structure
+---
 
-```tree
-janux/
-├── config/
-│   ├── janux.conf                   # Template file for janux settings
-│   ├── ssh_spec.ini                 # Template file for server aliases and identities
-│   └── transfer_map.yml             # Template for file transfer rules
-├── src/
-│   └── janux/
-│       ├── __init__.py
-│       ├── __main__.py              # Main package entry point for CLI calls
-│       ├── cli/                     # CLI subcommands
-│       ├── configuration/           # Load/parse/validate configurations and mappings
-│       ├── connection/              # SSH connection logic, authentication, error handling
-│       ├── key_management/          # SSH key generation, encryption, storage
-│       ├── transfer/                # File transfer logic across servers
-│       └── utils/                   # Shared utility functions, centralized logging, validation...
-├── tests/                           # Tests for the full package
-├── docs/                            # API documentation
-├── scripts/                         # Auxiliary scripts for environment setup and installation
-├── environment.yml                  # Python dependencies for conda
-├── pyproject.toml                   # Setup script for pip installation
-├── .gitignore
-├── README.md
-└── LICENSE
-```
+## Contributing
+
+Please refer to the [contribution guidelines](CONTRIBUTING.md).
+
+---
+
+## Acknowledgments
+
+### Authors & Contributors
+
+**Author**: @esther-poniatowski
+
+**Contact**: `{{ contact@example.com }}`
+
+For academic use, please cite using the GitHub "Cite this repository" feature to
+generate a citation in various formats.
+
+Alternatively, refer to the [citation metadata](CITATION.cff).
+
+### Third-Party Dependencies
+
+- **[Library A](link)** - Purpose
+- **[Library B](link)** - Purpose
+
+---
 
 ## License
 
-This project is under [GPL License].
+This project is licensed under the terms of the [GNU General Public License v3.0](LICENSE).
