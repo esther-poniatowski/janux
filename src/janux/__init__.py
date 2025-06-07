@@ -8,10 +8,13 @@ Janus package, utility to automating secure server connections.
 
 Modules
 -------
-main    
+main
     Main entry point for the Janux command line interface.
 cli
     Command line interface for Janux.
 initialization
     Functions for initializing Janux configuration.
 """
+from importlib.metadata import version
+
+__version__ = version(__package__)
