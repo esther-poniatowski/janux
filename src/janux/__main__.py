@@ -1,16 +1,16 @@
 """
-Command-line entry point for the `janux` package.
+Entry point for the `janux` package, invoked as a module.
 
 Usage
 -----
-To invoke the package::
+To launch the command-line interface, execute::
 
     python -m janux
 
 
 See Also
 --------
-janux.cli: Command-line interface module for the package.
+janux.cli: Module implementing the application's command-line interface.
 """
 from .cli import app
 
