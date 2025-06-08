@@ -52,4 +52,4 @@ where = ["src"]
 # --- CLI Entry Points -----------------------------------------------------------------------------
 
 [project.scripts]
-janux = "janux.cli:main"
+janux = "janux.cli:app"
