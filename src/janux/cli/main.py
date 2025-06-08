@@ -1,10 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 janux.cli.main
 ==============
 
-Main entry point for the Janux Command Line Interface. 
+Main entry point for the Janux Command Line Interface.
 
 
 See Also
