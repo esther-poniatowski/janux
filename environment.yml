@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python
+  - python=3.12
   # Specific functionality
   - typer        # For command-line interface
   - pyyaml       # For configuration parsing

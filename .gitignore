@@ -1,21 +1,38 @@
-# gitignore file for multitask-context-dependent-behavior-etl
-# -----------------------------------------------------------
+# gitignore file for janux
+# ----------------------------------
 
-# Temporary files
+## Temporary files
 *.tmp
 *.temp
 
-# MacOS
+## Credentials
+.git-credentials
+**/*.env
+**/!template.env
+
+## macOS
 .DS_Store
 
-# Python Cache
-__pycache__
+## Python Cache
+__pycache__/
 *.py[cod]
-.pytest_cache
-.mypy_cache
 
+## Python Distribution / Packaging
+*.egg-info/
+*.egg
+dist/
+build/
 
-# Credential files
-**/*.env
-**/!template.env 
+## Test Coverage
+.coverage
+htmlcov/
 
+## Tool Caches
+.pytest_cache/
+.mypy_cache/
+
+## Jupyter Notebook
+.ipynb_checkpoints/
+
+## Documentation Build
+docs/_build/
