@@ -1,7 +1,7 @@
 # Janux
 
 [![Conda](https://img.shields.io/badge/conda-eresthanaconda--channel-blue)](#installation)
-[![Maintenance](https://img.shields.io/maintenance/yes/2025)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2026)]()
 [![Last Commit](https://img.shields.io/github/last-commit/esther-poniatowski/janux)](https://github.com/esther-poniatowski/janux/commits/main)
 [![Python](https://img.shields.io/badge/python-supported-blue)](https://www.python.org/)
 [![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
@@ -111,18 +111,28 @@ conda install janux -c eresthanaconda
 
 ### Command Line Interface (CLI)
 
-To display the list of available commands and options:
+Initialize the Janux configuration structure for a project:
 
 ```sh
-janux --help
+janux init --destination ./my_project
+```
+
+This creates a `config/janux/` directory with templates for SSH host aliases,
+credentials, and connection profiles.
+
+Display version and platform diagnostics:
+
+```sh
+janux info
 ```
 
 ### Programmatic Usage
 
-To use the package programmatically in Python:
-
 ```python
-import janux
+from janux.initialization import create_config_structure
+
+# Initialize config structure programmatically
+create_config_structure(destination="./my_project")
 ```
 
 ---
