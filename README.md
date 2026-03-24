@@ -118,33 +118,25 @@ janux info
 ### Programmatic Usage
 
 ```python
+from pathlib import Path
 from janux.initialization import create_config_structure
 
 # Initialize config structure programmatically
-create_config_structure(destination="./my_project")
+create_config_structure(destination=Path("./my_project"))
 ```
 
 ---
 
 ## Configuration
 
-### Environment Variables
+Janux stores project-scoped configuration under a `config/janux/` directory created by
+`janux init`. The directory contains three sub-directories:
 
-|Variable|Description|Default|Required|
-|---|---|---|---|
-|`VAR_1`|Description 1|None|Yes|
-|`VAR_2`|Description 2|`false`|No|
+- `hosts/` -- Host alias definitions.
+- `credentials/` -- Credential references (key paths, identities).
+- `profiles/` -- Connection profiles combining hosts and credentials.
 
-### Configuration File
-
-Configuration options are specified in YAML files located in the `config/` directory.
-
-The canonical configuration schema is provided in [`config/default.yaml`](config/default.yaml).
-
-```yaml
-var_1: value1
-var_2: value2
-```
+Configuration file formats and environment variable support are not yet implemented.
 
 ---
 
