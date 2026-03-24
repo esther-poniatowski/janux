@@ -6,8 +6,7 @@
 [![Python](https://img.shields.io/badge/python-supported-blue)](https://www.python.org/)
 [![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 
-Remote access manager for automating project-specific server connections via reproducible and scoped
-SSH configurations.
+Remote access manager that automates SSH connections scoped to each project across multiple servers.
 
 ---
 
@@ -28,43 +27,35 @@ SSH configurations.
 
 ### Motivation
 
-Complex projects often involve executing distributed workflows across multiple remote servers and
-transferring data across them. This requires managing heterogeneous SSH configurations, credentials,
-and file transfer schemes.
+Complex projects often run distributed workflows across multiple remote servers and transfer data
+between them, requiring heterogeneous SSH configurations, credentials, and file transfer schemes.
 
-In standard practice, connections are manually configured on a designated controller machine, with
-SSH keys and settings stored globally in user or system locations. This approach is not scalable in
-collaborative or ephemeral computing environments, where multiple users and temporary controller
-machines must be provisioned. It results in repetitive setup procedures, unmanaged key
-proliferation, and residual configuration artifacts persisting after project completion.
+Standard practice stores SSH keys and settings globally on a designated controller machine.
+That approach does not scale in collaborative or ephemeral environments: setup is repetitive,
+keys proliferate without control, and residual configuration persists after project completion.
 
 ### Advantages
 
-This tool introduces a remote access management system for automated, reproducible, and
-project-scoped server orchestration.
+Janux automates SSH access at the project level:
 
-It provides the following benefits:
-
-- **Isolated configuration management**: Encapsulates credentials and host aliases at the project
-  level to avoid contamination of global SSH settings.
-- **Simplified access and identity handling**: Supports alias-based SSH connections and secure,
-  password-less authentication across multiple server identities.
-- **Automated setup and teardown**: Facilitates fast, consistent provisioning and cleanup of
-  temporary controller environments through pre-defined procedures.
-- **Reproducible execution and transfer workflows**: Automates task deployment and file
-synchronization across servers via declarative, version-controlled access specifications and
-directory mappings.
+- **Isolated credentials**: Keeps credentials and host aliases scoped to the project, avoiding
+  contaminating global SSH settings.
+- **Access through aliases**: Connects to servers through short labels with secure
+  authentication (without passwords) across multiple identities.
+- **Automated provisioning**: Sets up and tears down temporary controller environments through
+  predefined procedures.
+- **Declarative transfer workflows**: Deploys tasks and synchronizes files across servers via
+  access specifications tracked in version control and directory mappings.
 
 ---
 
 ## Features
 
-- [ ] **Identity-based connection management**: Manages multiple server identities from credential
-  files.
-- [ ] **Alias-based host access**: Simplifies SSH connections using short labels.
+- [ ] **Connections by identity**: Manages multiple server identities from credential files.
+- [ ] **Host access through aliases**: Simplifies SSH connections using short labels.
 - [ ] **Non-interactive scripting support**: Launches remote commands without manual password entry
   or prompts.
-- [ ] **Project-specific SSH key management**: Isolates key storage to prevent global pollution of
+- [ ] **SSH keys scoped to the project**: Isolates key storage to prevent global pollution of
   SSH configurations.
 - [ ] **Secure file transfers**: Transfers files across servers with structured directory mappings.
 
@@ -72,19 +63,17 @@ directory mappings.
 
 ## Installation
 
-To install the package and its dependencies, use one of the following methods:
+### Using pip
 
-### Using Pip Installs Packages
-
-Install the package from the GitHub repository URL via `pip`:
+Install from the GitHub repository:
 
 ```bash
 pip install git+https://github.com/esther-poniatowski/janux.git
 ```
 
-### Using Conda
+### Using conda
 
-Install the package from the private channel eresthanaconda:
+Install from the eresthanaconda channel:
 
 ```bash
 conda install janux -c eresthanaconda
@@ -117,7 +106,7 @@ Initialize the Janux configuration structure for a project:
 janux init --destination ./my_project
 ```
 
-This creates a `config/janux/` directory with templates for SSH host aliases,
+The `init` command creates a `config/janux/` directory with templates for SSH host aliases,
 credentials, and connection profiles.
 
 Display version and platform diagnostics:
