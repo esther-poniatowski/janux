@@ -41,6 +41,24 @@ class ConnectionSpec:
     port: int = 22
     identity_file: Path | None = None
 
+    def __post_init__(self) -> None:
+        host = self.host.strip()
+        user = self.user.strip()
+        if not host:
+            raise ValueError("host must not be empty")
+        if not user:
+            raise ValueError("user must not be empty")
+        if not 1 <= self.port <= 65535:
+            raise ValueError("port must be between 1 and 65535")
+        object.__setattr__(self, "host", host)
+        object.__setattr__(self, "user", user)
+        if self.identity_file is not None:
+            object.__setattr__(
+                self,
+                "identity_file",
+                self.identity_file.expanduser(),
+            )
+
 
 @dataclass(frozen=True)
 class HostConfig:
@@ -56,3 +74,9 @@ class HostConfig:
 
     alias: str
     connection: ConnectionSpec
+
+    def __post_init__(self) -> None:
+        alias = self.alias.strip()
+        if not alias:
+            raise ValueError("alias must not be empty")
+        object.__setattr__(self, "alias", alias)
