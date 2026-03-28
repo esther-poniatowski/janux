@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/python-supported-blue)](https://www.python.org/)
 [![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 
-Remote access manager that automates SSH connections scoped to each project across multiple servers.
+Automates project-scoped SSH connections across remote servers.
 
 ---
 

@@ -18,7 +18,7 @@ authors = [{name = "Esther Poniatowski", email = "esther.poniatowski@ens.psl.eu"
 license = "GPL-3.0-or-later"
 license-files = ["LICENSE"]
 readme = {file = "README.md", content-type = "text/markdown"}
-description = "Remote access manager for automating project-specific server connections"
+description = "Automates project-scoped SSH connections across remote servers."
 keywords = ["automation", "server-management", "ssh", "remote-access"]
 classifiers = [
     "Programming Language :: Python :: 3",
