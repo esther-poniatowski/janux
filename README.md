@@ -1,10 +1,10 @@
 # Janux
 
-[![Conda](https://img.shields.io/badge/conda-eresthanaconda--channel-blue)](#installation)
+[![Conda](https://img.shields.io/badge/conda-eresthanaconda--channel-blue)](docs/guide/installation.md)
 [![Maintenance](https://img.shields.io/maintenance/yes/2026)]()
 [![Last Commit](https://img.shields.io/github/last-commit/esther-poniatowski/janux)](https://github.com/esther-poniatowski/janux/commits/main)
-[![Python](https://img.shields.io/badge/python-supported-blue)](https://www.python.org/)
-[![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
+[![Python](https://img.shields.io/badge/python-%E2%89%A53.12-blue)](https://www.python.org/)
+[![License: GPL](https://img.shields.io/badge/License-GPL--3.0-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 
 Automates project-scoped SSH connections across remote servers.
 
@@ -14,11 +14,8 @@ Automates project-scoped SSH connections across remote servers.
 
 - [Overview](#overview)
 - [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
+- [Quick Start](#quick-start)
 - [Documentation](#documentation)
-- [Support](#support)
 - [Contributing](#contributing)
 - [Acknowledgments](#acknowledgments)
 - [License](#license)
@@ -27,87 +24,40 @@ Automates project-scoped SSH connections across remote servers.
 
 ### Motivation
 
-Complex projects often run distributed workflows across multiple remote servers and transfer data
-between them, requiring heterogeneous SSH configurations, credentials, and file transfer schemes.
-
-Standard practice stores SSH keys and settings globally on a designated controller machine.
-That approach does not scale in collaborative or ephemeral environments: setup is repetitive,
-keys proliferate without control, and residual configuration persists after project completion.
+Research and development workflows frequently involve transferring files and running
+commands on remote servers. Managing SSH credentials, host configurations, and transfer
+recipes across multiple projects and servers requires repetitive, error-prone setup.
 
 ### Advantages
 
-Janux automates SSH access at the project level:
-
-- **Isolated credentials**: Keeps credentials and host aliases scoped to the project, avoiding
-  contaminating global SSH settings.
-- **Access through aliases**: Connects to servers through short labels with secure
-  authentication (without passwords) across multiple identities.
-- **Automated provisioning**: Sets up and tears down temporary controller environments through
-  predefined procedures.
-- **Declarative transfer workflows**: Deploys tasks and synchronizes files across servers via
-  access specifications tracked in version control and directory mappings.
+- **Project-scoped credentials** — SSH keys, usernames, and host aliases are organized
+  per project rather than scattered across `~/.ssh/config`.
+- **Declarative connections** — host access and transfer workflows are defined in YAML,
+  eliminating ad-hoc scripts and manual `scp`/`rsync` commands.
+- **Automated provisioning** — key generation, remote key deployment, and
+  `~/.ssh/config` updates are handled through a single CLI.
 
 ---
 
 ## Features
 
-- [ ] **Connections by identity**: Manages multiple server identities from credential files.
-- [ ] **Host access through aliases**: Simplifies SSH connections using short labels.
-- [ ] **Non-interactive scripting support**: Launches remote commands without manual password entry
-  or prompts.
-- [ ] **SSH keys scoped to the project**: Isolates key storage to prevent global pollution of
-  SSH configurations.
-- [ ] **Secure file transfers**: Transfers files across servers with structured directory mappings.
+- [ ] **Host management**: Define and manage remote hosts through aliases with
+  configurable connection parameters.
+- [ ] **Credential management**: Generate, store, and deploy SSH keys per project.
+- [ ] **Connection profiles**: Group hosts, credentials, and transfer rules into
+  reusable profiles.
+- [ ] **Transfer workflows**: Declarative file transfer recipes with path mapping,
+  exclusion patterns, and dry-run support.
 
 ---
 
-## Installation
+## Quick Start
 
-### Using pip
-
-Install from the GitHub repository:
-
-```bash
-pip install git+https://github.com/esther-poniatowski/janux.git
-```
-
-### Using conda
-
-Install from the eresthanaconda channel:
-
-```bash
-conda install janux -c eresthanaconda
-```
-
-### From Source
-
-1. Clone the repository:
-
-      ```bash
-      git clone https://github.com/esther-poniatowski/janux.git
-      ```
-
-2. Create a dedicated virtual environment:
-
-      ```bash
-      cd janux
-      conda env create -f environment.yml
-      ```
-
----
-
-## Usage
-
-### Command Line Interface (CLI)
-
-Initialize the Janux configuration structure for a project:
+Connect to a registered host:
 
 ```sh
-janux init --destination ./my_project
+janux connect myserver
 ```
-
-The `init` command creates a `config/janux/` directory with templates for SSH host aliases,
-credentials, and connection profiles.
 
 Display version and platform diagnostics:
 
@@ -115,73 +65,40 @@ Display version and platform diagnostics:
 janux info
 ```
 
-### Programmatic Usage
-
-```python
-from pathlib import Path
-from janux.initialization import create_config_structure
-
-# Initialize config structure programmatically
-create_config_structure(destination=Path("./my_project"))
-```
-
----
-
-## Configuration
-
-Janux stores project-scoped configuration under a `config/janux/` directory created by
-`janux init`. The directory contains three sub-directories:
-
-- `hosts/` -- Host alias definitions.
-- `credentials/` -- Credential references (key paths, identities).
-- `profiles/` -- Connection profiles combining hosts and credentials.
-
-Configuration file formats and environment variable support are not yet implemented.
-
 ---
 
 ## Documentation
 
-- [User Guide](https://esther-poniatowski.github.io/janux/guide/)
-- [API Documentation](https://esther-poniatowski.github.io/janux/api/)
+| Guide | Content |
+| ----- | ------- |
+| [Installation](docs/guide/installation.md) | Prerequisites, pip/conda/source setup |
+| [Usage](docs/guide/usage.md) | Workflows and detailed examples |
+| [CLI Reference](docs/guide/cli-reference.md) | Full command registry and options |
+| [Configuration](docs/guide/configuration.md) | Host aliases, credentials, profiles |
 
-> [!NOTE]
-> Documentation can also be browsed locally from the [`docs/`](docs/) directory.
-
-## Support
-
-**Issues**: [GitHub Issues](https://github.com/esther-poniatowski/janux/issues)
-
-**Email**: `{{ contact@example.com }}`
+Full API documentation and rendered guides are also available at
+[esther-poniatowski.github.io/janux](https://esther-poniatowski.github.io/janux/).
 
 ---
 
 ## Contributing
 
-Please refer to the [contribution guidelines](CONTRIBUTING.md).
+Contribution guidelines are described in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
 ## Acknowledgments
 
-### Authors & Contributors
+### Authors
 
 **Author**: @esther-poniatowski
 
-**Contact**: `{{ contact@example.com }}`
-
-For academic use, please cite using the GitHub "Cite this repository" feature to
-generate a citation in various formats.
-
-Alternatively, refer to the [citation metadata](CITATION.cff).
-
-### Third-Party Dependencies
-
-- **[Library A](link)** - Purpose
-- **[Library B](link)** - Purpose
+For academic use, the GitHub "Cite this repository" feature generates citations in
+various formats. The [citation metadata](CITATION.cff) file is also available.
 
 ---
 
 ## License
 
-This project is licensed under the terms of the [GNU General Public License v3.0](LICENSE).
+This project is licensed under the terms of the
+[GNU General Public License v3.0](LICENSE).

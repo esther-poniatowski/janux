@@ -1,12 +1,15 @@
 # janux
 
-Welcome to the janux documentation.
+Automates project-scoped SSH connections across remote servers.
 
 ```{toctree}
 :maxdepth: 2
 :caption: User Guide
 
-guide/getting-started
+guide/installation
+guide/usage
+guide/cli-reference
+guide/configuration
 ```
 
 ```{toctree}
