@@ -32,8 +32,9 @@ recipes across multiple projects and servers requires repetitive, error-prone se
 
 - **Project-scoped credentials** — SSH keys, usernames, and host aliases are organized
   per project rather than scattered across `~/.ssh/config`.
-- **Declarative connections** — host access and transfer workflows are defined in YAML,
-  eliminating ad-hoc scripts and manual `scp`/`rsync` commands.
+- **Declarative connections** — host access and transfer workflows are defined in YAML
+  and tracked in version control, eliminating ad-hoc scripts and manual `scp`/`rsync`
+  commands.
 - **Automated provisioning** — key generation, remote key deployment, and
   `~/.ssh/config` updates are handled through a single CLI.
 
@@ -41,13 +42,17 @@ recipes across multiple projects and servers requires repetitive, error-prone se
 
 ## Features
 
-- [ ] **Host management**: Define and manage remote hosts through aliases with
-  configurable connection parameters.
-- [ ] **Credential management**: Generate, store, and deploy SSH keys per project.
+- [ ] **Host management**: Define remote hosts through aliases with configurable
+  connection parameters.
+- [ ] **Credential management**: Generate, store, and deploy SSH keys per project,
+  isolated from global SSH configuration. Manage multiple server identities from
+  credential files.
 - [ ] **Connection profiles**: Group hosts, credentials, and transfer rules into
-  reusable profiles.
-- [ ] **Transfer workflows**: Declarative file transfer recipes with path mapping,
-  exclusion patterns, and dry-run support.
+  reusable profiles with password-free authentication.
+- [ ] **Non-interactive scripting**: Launch remote commands without manual password
+  entry or interactive prompts.
+- [ ] **Transfer workflows**: Transfer files across servers with structured directory
+  mappings, exclusion patterns, and dry-run support.
 
 ---
 
