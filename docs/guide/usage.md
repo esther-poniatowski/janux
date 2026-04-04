@@ -1,75 +1,73 @@
 # Usage
 
-Janux automates SSH connections and file transfers across remote servers,
-organized by project. Hosts, credentials, and transfer workflows are defined
-declaratively in YAML.
+Janux scaffolds a project-scoped configuration directory for SSH connections.
+Additional features (host registration, key management, file transfers) are
+planned but not yet implemented.
 
 For the full command registry, refer to [CLI Reference](cli-reference.md). For
-host and credential settings, refer to [Configuration](configuration.md).
+the directory layout created by `init`, refer to
+[Configuration](configuration.md).
 
-## Registering a Remote Host
+## Initializing a Project
 
-Define a host alias with connection parameters:
-
-```sh
-janux host add myserver --hostname 192.168.1.100 --user admin --port 22
-```
-
-Host aliases abstract away IP addresses and connection details, allowing
-subsequent commands to reference hosts by name.
-
-## Connecting to a Host
-
-Open an SSH session to a registered host:
+The `init` command creates the Janux configuration directory tree under the
+current working directory:
 
 ```sh
-janux connect myserver
+janux init
 ```
 
-## Managing SSH Credentials
+The resulting layout:
 
-Generate a new SSH key pair scoped to the current project:
+```text
+config/janux/
+  hosts/
+  credentials/
+  profiles/
+```
+
+A different root can be specified with `--destination`:
 
 ```sh
-janux key generate --name project-key
+janux init --destination ~/projects/my-project
 ```
 
-Deploy a public key to a remote host:
+The command is idempotent -- running `init` again leaves existing directories
+intact.
+
+## Displaying Diagnostics
+
+The `info` command prints the installed version and platform details:
 
 ```sh
-janux key deploy project-key --host myserver
+janux info
 ```
 
-## Transferring Files
+Example output:
 
-Define a transfer recipe in the project configuration and execute it by name:
+```text
+janux 0.0.0 | Platform: Darwin Python 3.12.0
+```
+
+## Checking the Version
 
 ```sh
-janux transfer run sync-data --host myserver
+janux --version
 ```
 
-Transfer recipes support path mapping, exclusion patterns, and dry-run
-inspection:
+Prints the package version string and exits.
 
-```sh
-janux transfer run sync-data --host myserver --dry-run
-```
+## Planned Features
 
-## Listing Resources
+The following capabilities are defined in the domain model but have no CLI
+commands yet:
 
-List all registered hosts:
-
-```sh
-janux host list
-```
-
-List all available credentials:
-
-```sh
-janux key list
-```
+- **Host registration** -- add, list, and remove remote host aliases.
+- **SSH key management** -- generate, deploy, and list SSH key pairs.
+- **Connection** -- open interactive SSH sessions to registered hosts.
+- **File transfers** -- execute declarative transfer recipes.
 
 ## Next Steps
 
-- [CLI Reference](cli-reference.md) — Full command registry and options.
-- [Configuration](configuration.md) — Host aliases, credentials, profiles.
+- [CLI Reference](cli-reference.md) -- full command registry and options.
+- [Configuration](configuration.md) -- directory layout and file formats.
