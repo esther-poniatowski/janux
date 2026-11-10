@@ -32,20 +32,20 @@ system, and Python version.
 Create the Janux configuration directory tree.
 
 ```sh
-janux init [--destination PATH] [--config-root PATH] [--janux-root NAME] [--subdirectory NAME]...
+janux init [--root PATH] [--config-root PATH] [--janux-root NAME] [--subdirectory NAME]...
 ```
 
 | Option          | Default | Description                                  |
 | --------------- | ------- | -------------------------------------------- |
-| `--destination` | `.`     | Target directory for the configuration tree. |
-| `--config-root` | `config/local` | Folder of the configuration, relative to the destination. |
+| `--root`        | `.`     | Folder in which the configuration tree is created. |
+| `--config-root` | `config/local` | Folder of the configuration, relative to the root. |
 | `--janux-root`  | `janux` | Folder of Janux inside the configuration folder. |
 | `--subdirectory` | `hosts`, `credentials`, `profiles` | Subdirectory to create in the folder of Janux; repeat the option for several. |
 
-By default, the command creates `config/local/janux/` under the destination, with
+By default, the command creates `config/local/janux/` under the root, with
 subdirectories `hosts/`, `credentials/`, and `profiles/`. Hosts, credentials and
 profiles depend on one machine, so a project ignores `config/local/`. The options
-place the tree elsewhere; a root outside the destination is rejected. Existing
+place the tree elsewhere; a configuration folder outside the root is rejected. Existing
 directories are preserved.
 
-**Exit behavior:** prints the path to the created configuration root.
+**Exit behavior:** prints the path of the created folder of Janux.

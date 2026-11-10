@@ -33,10 +33,10 @@ The options `--config-root`, `--janux-root` and `--subdirectory` change the tree
 janux init --config-root config --janux-root janux --subdirectory hosts
 ```
 
-A different root can be specified with `--destination`:
+A different root can be specified with `--root`:
 
 ```sh
-janux init --destination ~/projects/my-project
+janux init --root ~/projects/my-project
 ```
 
 The command is idempotent -- running `init` again leaves existing directories

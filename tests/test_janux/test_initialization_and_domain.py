@@ -67,11 +67,44 @@ def test_init_command_takes_the_layout_from_its_options(tmp_path: Path) -> None:
 
     from janux.cli.init import app
 
-    result = CliRunner().invoke(app, ["--destination", str(tmp_path), "--config-root", "config",
+    result = CliRunner().invoke(app, ["--root", str(tmp_path), "--config-root", "config",
                                       "--janux-root", "janux", "--subdirectory", "hosts",
                                       "--subdirectory", "profiles"])
     assert result.exit_code == 0, result.output
     created = sorted(path.name for path in (tmp_path / "config" / "janux").iterdir())
     assert created == ["hosts", "profiles"]
-    rejected = CliRunner().invoke(app, ["--destination", str(tmp_path), "--config-root", "/abs"])
+    rejected = CliRunner().invoke(app, ["--root", str(tmp_path), "--config-root", "/abs"])
     assert rejected.exit_code != 0
+
+
+def test_init_command_creates_the_tree_under_the_root(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from janux.cli.init import app
+
+    result = CliRunner().invoke(app, ["--root", str(tmp_path)])
+    assert result.exit_code == 0, result.output
+    assert (tmp_path / "config" / "local" / "janux" / "hosts").is_dir()
+    assert "deprecated" not in result.stderr
+
+
+def test_init_command_accepts_the_former_destination_option_with_a_warning(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from janux.cli.init import app
+
+    result = CliRunner().invoke(app, ["--destination", str(tmp_path)])
+    assert result.exit_code == 0, result.output
+    assert (tmp_path / "config" / "local" / "janux" / "hosts").is_dir()
+    assert "--destination is deprecated" in result.stderr
+    assert "--root" in result.stderr
+    assert "--destination" not in CliRunner().invoke(app, ["--help"]).output
+
+
+def test_init_command_rejects_the_root_and_its_former_name_together(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from janux.cli.init import app
+
+    result = CliRunner().invoke(app, ["--root", str(tmp_path), "--destination", str(tmp_path)])
+    assert result.exit_code != 0
