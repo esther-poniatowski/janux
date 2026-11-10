@@ -4,13 +4,14 @@ import pytest
 
 from janux.domain import ConnectionSpec, HostConfig
 from janux.initialization import JanuxInitRequest, create_config_structure
+from janux.initialization.setup import JanuxConfigLayout
 
 
 def test_create_config_structure_accepts_missing_destination(tmp_path: Path) -> None:
     request = create_config_structure(tmp_path / "new-project")
 
     assert isinstance(request, JanuxInitRequest)
-    assert request.config_root == tmp_path / "new-project" / "config" / "janux"
+    assert request.config_root == tmp_path / "new-project" / "config" / "local" / "janux"
     assert request.config_root.is_dir()
     assert (request.config_root / "hosts").is_dir()
     assert (request.config_root / "credentials").is_dir()
@@ -46,3 +47,31 @@ def test_connection_spec_normalizes_and_validates() -> None:
 def test_host_config_rejects_empty_alias() -> None:
     with pytest.raises(ValueError, match="alias must not be empty"):
         HostConfig(alias=" ", connection=ConnectionSpec(host="example.org", user="deploy"))
+
+
+def test_layout_places_the_tree_where_the_request_asks(tmp_path: Path) -> None:
+    layout = JanuxConfigLayout(config_root="settings", janux_root="remote", subdirectories=("hosts",))
+    request = create_config_structure(JanuxInitRequest(destination=tmp_path, layout=layout))
+
+    assert request.config_root == tmp_path / "settings" / "remote"
+    assert [path.name for path in request.config_root.iterdir()] == ["hosts"]
+
+
+def test_layout_rejects_a_root_outside_the_destination() -> None:
+    with pytest.raises(ValueError, match="relative path"):
+        JanuxConfigLayout(config_root="../elsewhere")
+
+
+def test_init_command_takes_the_layout_from_its_options(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from janux.cli.init import app
+
+    result = CliRunner().invoke(app, ["--destination", str(tmp_path), "--config-root", "config",
+                                      "--janux-root", "janux", "--subdirectory", "hosts",
+                                      "--subdirectory", "profiles"])
+    assert result.exit_code == 0, result.output
+    created = sorted(path.name for path in (tmp_path / "config" / "janux").iterdir())
+    assert created == ["hosts", "profiles"]
+    rejected = CliRunner().invoke(app, ["--destination", str(tmp_path), "--config-root", "/abs"])
+    assert rejected.exit_code != 0

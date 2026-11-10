@@ -6,18 +6,19 @@ Running `janux init` creates the following tree under the target directory:
 
 ```text
 config/
-  janux/
-    hosts/          # Host alias definitions (planned)
-    credentials/    # SSH key references (planned)
-    profiles/       # Connection profiles (planned)
+  local/
+    janux/
+      hosts/          # Host alias definitions (planned)
+      credentials/    # SSH key references (planned)
+      profiles/       # Connection profiles (planned)
 ```
 
 The `JanuxConfigLayout` dataclass in `janux.initialization.setup` defines the
-directory names. Default values:
+directory names, and the options of `janux init` set them. Default values:
 
 | Field            | Default                                  |
 | ---------------- | ---------------------------------------- |
-| `config_root`    | `config`                                 |
+| `config_root`    | `config/local`                           |
 | `janux_root`     | `janux`                                  |
 | `subdirectories` | `hosts`, `credentials`, `profiles`       |
 

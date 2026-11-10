@@ -20,10 +20,17 @@ janux init
 The resulting layout:
 
 ```text
-config/janux/
+config/local/janux/
   hosts/
   credentials/
   profiles/
+```
+
+The folder `config/local/` holds the settings of one machine, which a project ignores in Git.
+The options `--config-root`, `--janux-root` and `--subdirectory` change the tree:
+
+```sh
+janux init --config-root config --janux-root janux --subdirectory hosts
 ```
 
 A different root can be specified with `--destination`:

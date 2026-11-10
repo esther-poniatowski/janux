@@ -18,9 +18,13 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class JanuxConfigLayout:
-    """Declarative description of the Janux config tree."""
+    """Declarative description of the Janux config tree.
 
-    config_root: str = "config"
+    The default root, ``config/local``, is the folder that a project repository ignores for the
+    settings of one machine, since hosts, credentials and connection profiles depend on the machine.
+    """
+
+    config_root: str = "config/local"
     janux_root: str = "janux"
     subdirectories: tuple[str, ...] = ("hosts", "credentials", "profiles")
 
@@ -29,6 +33,10 @@ class JanuxConfigLayout:
             raise ValueError("config_root must not be empty")
         if not self.janux_root.strip():
             raise ValueError("janux_root must not be empty")
+        for name, value in (("config_root", self.config_root), ("janux_root", self.janux_root)):
+            path = Path(value.strip())
+            if path.is_absolute() or ".." in path.parts:
+                raise ValueError(f"{name} must be a relative path inside the destination")
         if not self.subdirectories:
             raise ValueError("subdirectories must not be empty")
         normalized = tuple(subdir.strip() for subdir in self.subdirectories)
@@ -74,8 +82,9 @@ def _coerce_request(destination: Path | JanuxInitRequest) -> JanuxInitRequest:
 def create_config_structure(destination: Path | JanuxInitRequest) -> JanuxInitRequest:
     """Create a basic Janux configuration directory structure.
 
-    Creates a ``config/janux/`` tree under *destination* with placeholder
-    sub-directories for hosts, credentials, and profiles.
+    Creates a ``config/local/janux/`` tree under *destination*, by default, with placeholder
+    sub-directories for hosts, credentials, and profiles. A request carrying another
+    :class:`JanuxConfigLayout` creates the tree that its layout declares.
 
     Parameters
     ----------
