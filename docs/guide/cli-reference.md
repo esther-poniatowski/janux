@@ -32,12 +32,12 @@ system, and Python version.
 Create the Janux configuration directory tree.
 
 ```sh
-janux init [--root PATH] [--config-root PATH] [--janux-root NAME] [--subdirectory NAME]...
+janux init [-r|--root PATH] [--config-root PATH] [--janux-root NAME] [--subdirectory NAME]...
 ```
 
 | Option          | Default | Description                                  |
 | --------------- | ------- | -------------------------------------------- |
-| `--root`        | `.`     | Folder in which the configuration tree is created. |
+| `-r`, `--root`  | `JANUX_ROOT`, else `.` | Folder in which the configuration tree is created. |
 | `--config-root` | `config/local` | Folder of the configuration, relative to the root. |
 | `--janux-root`  | `janux` | Folder of Janux inside the configuration folder. |
 | `--subdirectory` | `hosts`, `credentials`, `profiles` | Subdirectory to create in the folder of Janux; repeat the option for several. |
@@ -45,7 +45,16 @@ janux init [--root PATH] [--config-root PATH] [--janux-root NAME] [--subdirector
 By default, the command creates `config/local/janux/` under the root, with
 subdirectories `hosts/`, `credentials/`, and `profiles/`. Hosts, credentials and
 profiles depend on one machine, so a project ignores `config/local/`. The options
-place the tree elsewhere; a configuration folder outside the root is rejected. Existing
-directories are preserved.
+place the tree elsewhere; a configuration folder outside the root is rejected.
 
-**Exit behavior:** prints the path of the created folder of Janux.
+The root is the folder given by `--root`, else the folder named by the environment variable
+`JANUX_ROOT`, else the current folder. Janux has no settings file, so it does not search the
+ancestors of the current folder for one. A relative path is read from the current folder.
+
+The command creates folders only. Existing folders and the files that they hold are preserved,
+so the command can run again on an initialized project. A file that occupies the place of a
+folder of the tree is never replaced: the command stops and names the file.
+
+**Exit behavior:** prints the path of the created folder of Janux and exits with status 0.
+A usage error, such as an unknown option or argument, a configuration folder outside the root,
+or a file in place of a folder, exits with status 2.

@@ -25,10 +25,10 @@ typer.Typer
 import typer
 
 from janux import info, __version__
-from janux.cli.init import app as init_app
+from janux.cli.init import init
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
-app.add_typer(init_app, name="init", help="Initialize Janux configuration structure.")
+app.command("init", help="Initialize Janux configuration structure.")(init)
 
 
 @app.command("info")

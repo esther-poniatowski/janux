@@ -9,10 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-- `janux init` takes the folder in which it creates the configuration tree from `--root`,
-  the option name shared by the tools of the workspace.
+- `janux init` takes the folder in which it creates the configuration tree from `-r`/`--root`,
+  the option name shared by the tools of the workspace, else from the environment variable
+  `JANUX_ROOT`, else from the current folder.
+- `janux init` stops with status 2 and names the file when a file occupies the place of a folder
+  of the tree, instead of failing with a traceback.
+- `janux init` is a plain command: its usage no longer announces subcommands.
 
-### Deprecated
+### Removed
 
-- `janux init --destination` is a hidden alias of `--root`, kept for one release. It prints a
-  warning that names `--root`, and it will be removed in the next release.
+- `janux init --destination`, the former name of `--root`. The option is rejected.

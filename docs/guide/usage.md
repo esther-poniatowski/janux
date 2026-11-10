@@ -33,14 +33,17 @@ The options `--config-root`, `--janux-root` and `--subdirectory` change the tree
 janux init --config-root config --janux-root janux --subdirectory hosts
 ```
 
-A different root can be specified with `--root`:
+A different root can be specified with `--root`, or with the environment variable
+`JANUX_ROOT`:
 
 ```sh
 janux init --root ~/projects/my-project
+JANUX_ROOT=~/projects/my-project janux init
 ```
 
-The command is idempotent -- running `init` again leaves existing directories
-intact.
+The command is idempotent: running `init` again leaves existing folders and their files
+intact. A file in place of a folder of the tree stops the command with an error that names
+the file.
 
 ## Displaying Diagnostics
 

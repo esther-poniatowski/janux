@@ -88,23 +88,63 @@ def test_init_command_creates_the_tree_under_the_root(tmp_path: Path) -> None:
     assert "deprecated" not in result.stderr
 
 
-def test_init_command_accepts_the_former_destination_option_with_a_warning(tmp_path: Path) -> None:
+def test_init_command_rejects_the_retired_destination_option(tmp_path: Path) -> None:
     from typer.testing import CliRunner
 
     from janux.cli.init import app
 
     result = CliRunner().invoke(app, ["--destination", str(tmp_path)])
-    assert result.exit_code == 0, result.output
-    assert (tmp_path / "config" / "local" / "janux" / "hosts").is_dir()
-    assert "--destination is deprecated" in result.stderr
-    assert "--root" in result.stderr
-    assert "--destination" not in CliRunner().invoke(app, ["--help"]).output
+    assert result.exit_code == 2
+    assert not (tmp_path / "config").exists()
 
 
-def test_init_command_rejects_the_root_and_its_former_name_together(tmp_path: Path) -> None:
+def test_init_command_takes_the_root_from_the_environment(tmp_path: Path) -> None:
     from typer.testing import CliRunner
 
     from janux.cli.init import app
 
-    result = CliRunner().invoke(app, ["--root", str(tmp_path), "--destination", str(tmp_path)])
-    assert result.exit_code != 0
+    result = CliRunner().invoke(app, [], env={"JANUX_ROOT": str(tmp_path)})
+    assert result.exit_code == 0, result.output
+    assert (tmp_path / "config" / "local" / "janux" / "hosts").is_dir()
+    explicit = tmp_path / "explicit"
+    result = CliRunner().invoke(app, ["-r", str(explicit)], env={"JANUX_ROOT": str(tmp_path)})
+    assert result.exit_code == 0, result.output
+    assert (explicit / "config" / "local" / "janux" / "hosts").is_dir()
+
+
+def test_init_command_is_idempotent_and_keeps_existing_files(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from janux.cli.init import app
+
+    assert CliRunner().invoke(app, ["--root", str(tmp_path)]).exit_code == 0
+    note = tmp_path / "config" / "local" / "janux" / "hosts" / "lab.yml"
+    note.write_text("host: example.org\n")
+    result = CliRunner().invoke(app, ["--root", str(tmp_path)])
+    assert result.exit_code == 0, result.output
+    assert note.read_text() == "host: example.org\n"
+
+
+def test_init_command_refuses_a_file_in_place_of_a_folder(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from janux.cli.init import app
+
+    blocking = tmp_path / "config" / "local" / "janux" / "profiles"
+    blocking.parent.mkdir(parents=True)
+    blocking.write_text("kept")
+    result = CliRunner().invoke(app, ["--root", str(tmp_path)])
+    assert result.exit_code == 2
+    assert str(blocking) in result.stderr
+    assert blocking.read_text() == "kept"
+    assert not (tmp_path / "config" / "local" / "janux" / "hosts").exists()
+
+
+def test_init_command_rejects_a_trailing_token(tmp_path: Path) -> None:
+    from typer.testing import CliRunner
+
+    from janux.cli import app
+
+    result = CliRunner().invoke(app, ["init", "--root", str(tmp_path), "extra"])
+    assert result.exit_code == 2
+    assert not (tmp_path / "config").exists()

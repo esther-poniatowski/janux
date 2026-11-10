@@ -2,7 +2,8 @@
 
 ## Directory Layout
 
-Running `janux init` creates the following tree under the root folder (option `--root`):
+Running `janux init` creates the following tree under the root folder (option `--root`, or the
+environment variable `JANUX_ROOT`):
 
 ```text
 config/

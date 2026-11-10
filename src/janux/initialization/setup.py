@@ -91,8 +91,21 @@ def create_config_structure(destination: Path | JanuxInitRequest) -> JanuxInitRe
     destination : Path | JanuxInitRequest
         Root directory or validated init request under which the configuration
         tree is created.
+
+    Raises
+    ------
+    FileExistsError
+        If a file occupies the place of a folder of the tree. The function creates folders
+        only, so it never overwrites or deletes a file, and it creates nothing in that case.
     """
     request = _coerce_request(destination)
-    for subdir in request.layout.child_paths(request.destination):
-        subdir.mkdir(parents=True, exist_ok=True)
+    targets = request.layout.child_paths(request.destination)
+    for target in targets:
+        for path in (target, *target.parents):
+            if path.exists() and not path.is_dir():
+                raise FileExistsError(f"{path} is a file, where Janux needs a folder")
+            if path == request.destination:
+                break
+    for target in targets:
+        target.mkdir(parents=True, exist_ok=True)
     return request

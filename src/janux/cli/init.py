@@ -9,13 +9,17 @@ Commands
 init
     Create the directory layout for Janux configuration, by default under
     ``config/local/janux/``, or at the places given by its options.
+
+Notes
+-----
+The root is resolved from ``--root``, then from the environment variable ``JANUX_ROOT``, then
+from the current folder. Janux has no settings file, so the command does not search the
+ancestors of the current folder.
 """
 
 from pathlib import Path
-from typing import Optional
 
 import typer
-from click.core import ParameterSource
 
 from janux.initialization import JanuxInitRequest, create_config_structure
 from janux.initialization.setup import DEFAULT_CONFIG_LAYOUT, JanuxConfigLayout
@@ -23,20 +27,14 @@ from janux.initialization.setup import DEFAULT_CONFIG_LAYOUT, JanuxConfigLayout
 app = typer.Typer()
 
 
-@app.callback(invoke_without_command=True)
+@app.command("init")
 def init(
-    ctx: typer.Context,
     root: Path = typer.Option(
         ".",
         "--root",
+        "-r",
+        envvar="JANUX_ROOT",
         help="Folder in which the configuration tree is created.",
-        file_okay=False,
-        resolve_path=True,
-    ),
-    destination: Optional[Path] = typer.Option(
-        None,
-        "--destination",
-        hidden=True,
         file_okay=False,
         resolve_path=True,
     ),
@@ -55,12 +53,6 @@ def init(
     ),
 ) -> None:
     """Initialize the structure for Janux in the root folder."""
-    if destination is not None:
-        # Former name of --root, kept for one release as a hidden alias.
-        if ctx.get_parameter_source("root") is not ParameterSource.DEFAULT:
-            raise typer.BadParameter("--destination is the former name of --root; give only --root.")
-        typer.echo("Warning: --destination is deprecated and will be removed; use --root.", err=True)
-        root = destination
     try:
         layout = JanuxConfigLayout(
             config_root=config_root, janux_root=janux_root, subdirectories=tuple(subdirectory)
@@ -68,5 +60,9 @@ def init(
     except ValueError as error:
         raise typer.BadParameter(str(error)) from error
     request = JanuxInitRequest(destination=root, layout=layout)
-    request = create_config_structure(request)
+    try:
+        request = create_config_structure(request)
+    except FileExistsError as error:
+        typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(code=2) from error
     typer.echo(f"Janux configuration initialized in: {request.config_root}")
