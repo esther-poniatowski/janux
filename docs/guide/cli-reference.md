@@ -48,7 +48,7 @@ profiles depend on one machine, so a project ignores `config/local/`. The option
 place the tree elsewhere; a configuration folder outside the root is rejected.
 
 The root is the folder given by `--root`, else the folder named by the environment variable
-`JANUX_ROOT`, else the current folder. Janux has no settings file, so it does not search the
+`JANUX_ROOT`, else the current folder. Janux has no configuration file, so it does not search the
 ancestors of the current folder for one. A relative path is read from the current folder.
 
 The command creates folders only. Existing folders and the files that they hold are preserved,

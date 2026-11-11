@@ -13,7 +13,7 @@ init
 Notes
 -----
 The root is resolved from ``--root``, then from the environment variable ``JANUX_ROOT``, then
-from the current folder. Janux has no settings file, so the command does not search the
+from the current folder. Janux has no configuration file, so the command does not search the
 ancestors of the current folder.
 """
 
